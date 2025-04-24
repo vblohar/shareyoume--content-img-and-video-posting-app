@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+      <app-create-post (postCreated)="loadPosts()"></app-create-post>
+      
+      <div *ngIf="isLoading" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+  
+      <app-post-list [posts]="posts"></app-post-list>
+  
+      <div *ngIf="posts.length === 0 && !isLoading" class="text-center my-4">
+        <p>No posts found. Be the first to post!</p>
+      </div>
+  
+      <mat-paginator *ngIf="totalPosts > pageSize"
+        [length]="totalPosts"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>

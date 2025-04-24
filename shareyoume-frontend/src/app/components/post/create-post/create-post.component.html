@@ -1,0 +1,28 @@
+<div class="card mb-4">
+    <div class="card-body">
+      <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <textarea class="form-control" formControlName="content" rows="3" placeholder="What's on your mind?"></textarea>
+          <div *ngIf="postForm.get('content')?.invalid && postForm.get('content')?.touched" class="text-danger">
+            <div *ngIf="postForm.get('content')?.errors?.['required']">Content is required</div>
+            <div *ngIf="postForm.get('content')?.errors?.['maxlength']">Content must be less than 1000 characters</div>
+          </div>
+        </div>
+        
+        <div *ngIf="previewUrl" class="mb-3">
+          <img [src]="previewUrl" class="img-fluid rounded" style="max-height: 300px;">
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <input type="file" id="media" (change)="onFileSelected($event)" accept="image/*,video/*" class="d-none">
+            <label for="media" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-image"></i> Add Media
+            </label>
+            <small *ngIf="selectedFile" class="ms-2">{{ selectedFile.name }}</small>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
