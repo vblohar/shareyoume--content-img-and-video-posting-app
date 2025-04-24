@@ -30,7 +30,7 @@ export class PostService {
   }
 
   createPost(formData: FormData): Observable<Post> {
-    return this.http.post<Post>(`${this.apiUrl}`, formData);
+    return this.http.post<Post>(`${this.apiUrl}/post`, formData);
   }
 
   deletePost(id: number): Observable<any> {
