@@ -13,6 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Base64;
+
 @Service
 
 public class PostService {
@@ -30,6 +35,7 @@ public class PostService {
 
         Post post = new Post();
         post.setContent(postRequest.getContent());
+        post.setMediaName(postRequest.getMediaName());
         post.setMediaUrl(postRequest.getMediaUrl());
         post.setMediaType(postRequest.getMediaType());
         post.setUser(user);
@@ -66,5 +72,21 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    public static String convertImageToBase64(File file) {
+        try {
+
+            FileInputStream imageInFile = new FileInputStream(file);
+            byte[] imageData = new byte[(int) file.length()];
+            imageInFile.read(imageData);
+            imageInFile.close();
+
+            // Encode image byte array to Base64 string
+            return Base64.getEncoder().encodeToString(imageData);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

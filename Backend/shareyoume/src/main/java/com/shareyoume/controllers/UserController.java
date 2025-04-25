@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<UserProfile> getCurrentUser(@RequestHeader("Authorization") String authorization) {
         // The actual user would be extracted from the JWT token in the security context
         // For simplicity, we're just returning a mock response

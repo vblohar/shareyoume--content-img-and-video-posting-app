@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "posts")
-@Setter
-@Getter
+
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +19,20 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    private String mediaName;
     private String mediaUrl;
     private String mediaType; // image, video, etc.
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public String getMediaName() {
+        return mediaName;
+    }
+
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

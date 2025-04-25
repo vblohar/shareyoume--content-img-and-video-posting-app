@@ -11,7 +11,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponse {
+
     private Long id;
+    private String content;
+    private String mediaUrl;
+    private String mediaType;
+    private LocalDateTime createdAt;
+    private UserResponse user;
+    private String mediaName;
 
     public UserResponse getUser() {
         return user;
@@ -61,17 +68,24 @@ public class PostResponse {
         this.id = id;
     }
 
-    private String content;
-    private String mediaUrl;
-    private String mediaType;
-    private LocalDateTime createdAt;
-    private UserResponse user;
+    public String getMediaName() {
+        return mediaName;
+    }
+
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
+
+
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserResponse {
         private Long id;
+        private String username;
+        private String name;
+        private String profileImageUrl;
 
         public String getName() {
             return name;
@@ -105,9 +119,7 @@ public class PostResponse {
             this.profileImageUrl = profileImageUrl;
         }
 
-        private String username;
-        private String name;
-        private String profileImageUrl;
+
     }
 
     public static PostResponse fromPost(Post post) {
@@ -115,6 +127,7 @@ public class PostResponse {
         response.setId(post.getId());
         response.setContent(post.getContent());
         response.setMediaUrl(post.getMediaUrl());
+        response.setMediaName(post.getMediaName());
         response.setMediaType(post.getMediaType());
         response.setCreatedAt(post.getCreatedAt());
 

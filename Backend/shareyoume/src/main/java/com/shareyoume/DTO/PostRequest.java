@@ -6,20 +6,19 @@ import lombok.Data;
 
 @Data
 public class PostRequest {
+
+    @Size(max = 1000)
+    private String content;
+    private String mediaName;
+    private String mediaType;
+    private String mediaUrl;
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getMediaUrl() {
-        return mediaUrl;
-    }
-
-    public void setMediaUrl(String mediaUrl) {
-        this.mediaUrl = mediaUrl;
     }
 
     public String getMediaType() {
@@ -31,9 +30,21 @@ public class PostRequest {
     }
 
 
-    @Size(max = 1000)
-    private String content;
+    public String getMediaName() {
+        return mediaName;
+    }
 
-    private String mediaUrl;
-    private String mediaType;
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+
 }
