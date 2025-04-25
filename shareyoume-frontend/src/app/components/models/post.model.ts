@@ -1,8 +1,9 @@
 export interface Post {
     id: number;
     content: string;
-    mediaUrl: string;
+    mediaName: string;
     mediaType: string;
+    mediaUrl: String;
     createdAt: Date;
     user: {
       id: number;
@@ -14,6 +15,6 @@ export interface Post {
   
   export interface PostRequest {
     content: string;
-    mediaUrl?: string;
+    mediaName?: string;
     mediaType?: string;
   }

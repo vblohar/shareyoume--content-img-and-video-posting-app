@@ -15,6 +15,7 @@ export class CreatePostComponent {
   postForm: FormGroup;
   selectedFile: File | null = null;
   previewUrl: string | ArrayBuffer | null = null;
+  mediaUrl: string ='';
 
   constructor(
     private fb: FormBuilder,
@@ -22,19 +23,22 @@ export class CreatePostComponent {
   ) {
     this.postForm = this.fb.group({
       content: ['', [Validators.required, Validators.maxLength(1000)]],
-      media: [null]
+      media: [null],
+     
     });
   }
 
   onFileSelected(event: any): void {
+    // debugger;
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
       
       // Create preview
-      const reader = new FileReader();
+      const reader: any = new FileReader();
       reader.onload = () => {
         this.previewUrl = reader.result;
+       
       };
       reader.readAsDataURL(file);
     }
@@ -44,11 +48,13 @@ export class CreatePostComponent {
     if (this.postForm.invalid) {
       return;
     }
-
+    
     const formData = new FormData();
     formData.append('content', this.postForm.get('content')?.value);
     if (this.selectedFile) {
       formData.append('media', this.selectedFile);
+   
+      
     }
 
     this.postService.createPost(formData).subscribe({

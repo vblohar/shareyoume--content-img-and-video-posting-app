@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    debugger;
+    console.log("profile components..")
     this.loadUserProfile();
     this.loadUserPosts();
   }

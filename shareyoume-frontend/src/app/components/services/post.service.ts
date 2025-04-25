@@ -36,4 +36,10 @@ export class PostService {
   deletePost(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getMediaFile(mediaName: string): Observable<Blob>{
+    return this.http.get(`${this.apiUrl}/media/${mediaName}`, {
+      responseType: 'blob',
+    });
+  }
 }
