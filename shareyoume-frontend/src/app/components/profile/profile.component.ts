@@ -5,11 +5,12 @@ import { PostService } from '../services/post.service';
 import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { PostListComponent } from "../post/post-list/post-list.component";
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, PostListComponent, MatPaginatorModule],
+  imports: [CommonModule, PostListComponent, MatPaginatorModule, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -28,21 +29,24 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    debugger;
+
     console.log("profile components..")
     this.loadUserProfile();
-    this.loadUserPosts();
+   
+
   }
 
   loadUserProfile(): void {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.user = user;
+        this.loadUserPosts();
       },
       error: (err) => {
         console.error('Error loading user profile:', err);
       }
     });
+    
   }
 
   loadUserPosts(): void {

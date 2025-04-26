@@ -34,6 +34,7 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+    
     if (this.registerForm.invalid) {
       return;
     }
