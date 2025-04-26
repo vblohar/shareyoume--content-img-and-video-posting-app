@@ -4,9 +4,13 @@ import com.shareyoume.DTO.UserProfile;
 import com.shareyoume.exception.ResourceNotFoundException;
 import com.shareyoume.models.User;
 import com.shareyoume.repos.UserRepository;
+import com.shareyoume.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 public class UserController {
     private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     @GetMapping("/{username}")
@@ -25,14 +31,13 @@ public class UserController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        UserProfile profile = new UserProfile(
-                user.getId(),
-                user.getUsername(),
-                user.getName(),
-                user.getEmail(),
-                user.getProfileImageUrl(),
-                user.getBio()
-        );
+        UserProfile profile = new UserProfile();
+        profile.setId(user.getId());
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setUsername(user.getUsername());
+        profile.setProfileImageUrl(user.getProfileImageUrl());
+        profile.setBio(user.getBio());
 
         return ResponseEntity.ok(profile);
     }
@@ -41,16 +46,23 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<UserProfile> getCurrentUser(@RequestHeader("Authorization") String authorization) {
         // The actual user would be extracted from the JWT token in the security context
-        // For simplicity, we're just returning a mock response
-        UserProfile profile = new UserProfile(
-                1L,
-                "currentUser",
-                "Current User",
-                "current@user.com",
-                "https://example.com/profile.jpg",
-                "This is my bio"
-        );
-        return ResponseEntity.ok(profile);
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid authorization header");
+        }
+        String jwtToken = authorization.substring(7);
+        String username = jwtUtils.getUserNameFromJwtToken(jwtToken);
 
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+
+        UserProfile profile = new UserProfile();
+            profile.setId(user.getId());
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setUsername(user.getUsername());
+        profile.setProfileImageUrl(user.getProfileImageUrl());
+        profile.setBio(user.getBio());
+
+        return ResponseEntity.ok(profile);
     }
 }
