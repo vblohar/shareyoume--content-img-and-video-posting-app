@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { TokenStorageService } from './components/services/token-storage.service';
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { CommonModule } from '@angular/common';
-import { AuthService } from './components/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,15 +15,18 @@ export class AppComponent {
   isLoggedIn = false;
   username?: string;
 
-  constructor(private tokenStorage: TokenStorageService, private authService: AuthService) { }
+  constructor(private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe((isLoged) => {
-      this.isLoggedIn = !!this.tokenStorage.getToken();
+    this.isLoggedIn = !!this.tokenStorage.getToken();
     if (this.isLoggedIn) {
       const user = this.tokenStorage.getUser();
       this.username = user.username;
     }
-    })
+  }
+
+  logout(): void {
+    this.tokenStorage.signOut();
+    window.location.reload();
   }
 }

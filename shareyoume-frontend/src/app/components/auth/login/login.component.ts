@@ -46,21 +46,17 @@ export class LoginComponent {
     const { username, password } = this.loginForm.value;
 
     this.authService.login({ username, password }).subscribe(
-
       data => {
         this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.authService.isLoggedIn();
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['']);
-        });
+        this.router.navigate(['/feed']);
       },
-        err => {
-          this.errorMessage = err.error.message || 'Login failed';
-          this.isLoginFailed = true;
-        }
+      err => {
+        this.errorMessage = err.error.message || 'Login failed';
+        this.isLoginFailed = true;
+      }
     );
   }
 }

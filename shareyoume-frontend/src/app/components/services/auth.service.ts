@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthRequest, AuthResponse, SignupRequest } from '../models/user.model';
 import { TokenStorageService } from './token-storage.service';
@@ -12,8 +12,6 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
-  private _isLoggedIn = new BehaviorSubject<boolean>(false);
-  public isLoggedIn$ = this._isLoggedIn.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -30,7 +28,7 @@ export class AuthService {
           email: response.email,
           name: response.name,
           profileImageUrl: response.profileImageUrl,
-          roles: response.roles 
+          roles: ['ROLE_USER'] // This should come from the backend
         });
       })
     );
@@ -42,11 +40,9 @@ export class AuthService {
 
   logout(): void {
     this.tokenStorage.signOut();
-    this._isLoggedIn.next(false);
   }
 
   isLoggedIn(): boolean {
-    this._isLoggedIn.next(true);
     return !!this.tokenStorage.getToken();
   }
 
