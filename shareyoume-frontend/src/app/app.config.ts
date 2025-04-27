@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withRouterConfig } from '@angular/router';
 
 
 import { routes } from './app.routes';
@@ -10,7 +10,8 @@ import { AuthGuard } from './components/guards/auth.guard';
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptorFn])),
-    AuthGuard
+    AuthGuard,
+    provideRouter(routes, withRouterConfig({onSameUrlNavigation: 'reload'}))
           
   ]
 };
