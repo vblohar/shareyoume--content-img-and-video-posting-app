@@ -29,11 +29,8 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     console.log("profile components..")
     this.loadUserProfile();
-   
-
   }
 
   loadUserProfile(): void {
@@ -50,11 +47,13 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUserPosts(): void {
+    debugger;
     this.isLoading = true;
     if (this.user) {
       this.postService.getPostsByUser(this.user.username, this.currentPage, this.pageSize).subscribe({
         next: (data) => {
           this.posts = data.content;
+          // this.posts = data.content.sort((a: { createdAt: Date; }, b: { createdAt: Date; })=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           this.totalPosts = data.totalElements;
           this.isLoading = false;
         },
